@@ -7,7 +7,7 @@ A Chrome browser extension that automatically verifies AI responses across multi
 ## 🖥️ How It Works
 
 ```
-You get a response from ChatGPT or Claude
+You get a response from ChatGPT, Claude, or Gemini
               ↓
 Click the Cross-Check button that appears below the response
               ↓
@@ -25,11 +25,13 @@ Results panel appears directly on the page showing:
 
 - **Real-time verification** — Cross-checks any AI response without leaving the page
 - **Multi-model consensus** — Routes to Claude, GPT-4o, Gemini, Cohere, Groq, and DeepSeek simultaneously
+- **Live fact-checking** — Brave Search API pulls real web sources to verify claims in real time
+- **Fabricated citation detection** — Catches hallucinated and future-dated sources automatically
 - **Bias detection** — Identifies potential bias flagged across models
 - **Confidence scoring** — Per-model and average confidence percentage
 - **Verdict classification** — ACCURATE, PARTIALLY ACCURATE, INACCURATE, or UNVERIFIABLE
 - **Free tier** — 10 checks per month with 2 models, no signup required
-- **Pro tier** — Unlimited checks with all 6 models
+- **Pro tier** — Unlimited checks with all models
 - **BYOK** — Bring your own API keys for maximum control
 
 ---
