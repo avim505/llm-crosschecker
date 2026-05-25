@@ -156,6 +156,16 @@ function buildReport(data) {
   return lines.join("\n");
 }
 
+// ── Escape HTML special characters to prevent XSS from external data ─────────
+function escapeHtml(str) {
+  return String(str)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
 // ── Create results panel ──────────────────────────────────────────────────────
 function createResultsPanel(data) {
   const { results, overall, plan, usage, sources, topic } = data;
@@ -251,14 +261,15 @@ function createResultsPanel(data) {
     ? `<div class="llm-checker-sources">
         <div class="llm-checker-sources-title">Sources used for fact-checking</div>
         ${sources
-          .map(
-            (s) => `
-          <a class="llm-checker-source-item" href="${s.url}" target="_blank" rel="noopener noreferrer">
-            <span class="llm-checker-source-title">${s.title}</span>
-            <span class="llm-checker-source-snippet">${s.snippet}</span>
-            <span class="llm-checker-source-url">${s.url}</span>
-          </a>`,
-          )
+          .map((s) => {
+            const safeUrl = /^https?:\/\//.test(s.url) ? escapeHtml(s.url) : "#";
+            return `
+          <a class="llm-checker-source-item" href="${safeUrl}" target="_blank" rel="noopener noreferrer">
+            <span class="llm-checker-source-title">${escapeHtml(s.title)}</span>
+            <span class="llm-checker-source-snippet">${escapeHtml(s.snippet)}</span>
+            <span class="llm-checker-source-url">${escapeHtml(s.url)}</span>
+          </a>`;
+          })
           .join("")}
       </div>`
     : "";

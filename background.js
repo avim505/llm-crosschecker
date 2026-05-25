@@ -42,11 +42,14 @@ async function getUserStatus(paid) {
 }
 
 // ── Save BYOK keys to backend ─────────────────────────────────────────────────
-async function saveBYOKKeys(keys) {
+async function saveBYOKKeys(keys, paid) {
   const installId = await getInstallId();
   const response = await fetch(`${BACKEND_URL}/api/auth/byok/${installId}`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+      "x-paid": paid ? "true" : "false",
+    },
     body: JSON.stringify(keys),
   });
   return response.json();
@@ -145,7 +148,10 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
   // ── Save BYOK keys ──────────────────────────────────────────────────────────
   if (message.type === "SAVE_BYOK") {
-    saveBYOKKeys(message.keys)
+    extpay
+      .getUser()
+      .catch(() => ({ paid: false }))
+      .then((user) => saveBYOKKeys(message.keys, user.paid))
       .then((result) => {
         sendResponse(result);
       })
